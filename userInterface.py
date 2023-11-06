@@ -1,3 +1,4 @@
+# userInterface.py
 from ssl import ALERT_DESCRIPTION_ACCESS_DENIED, AlertDescription
 from fastapi import FastAPI, Depends, Request, Form
 from fastapi.staticfiles import StaticFiles
@@ -15,12 +16,6 @@ DATABASE_URL = "mysql+mysqlconnector://root@localhost/logistic"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
-
-# class Embarque(BaseModel):
-#     origen: str
-#     destino: str
-#     fecha_entrega_estimada: str  
-#     peso: float 
 
 class Usuarios(Base):
     __tablename__ = 'Usuarios'

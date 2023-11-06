@@ -1,4 +1,6 @@
+# panels.py
 from fastapi import FastAPI, Depends, Request
+from reactpy import component, html
 from sqlalchemy.orm import Session
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
@@ -139,8 +141,8 @@ def UsuariosComponent(usuarios):
                     "alt": "Imagen de perfil", 
                     "className": "img-thumbnail", 
                     "style": {
-                        "width": "50px", 
-                        "height": "50px"  
+                        "width": "70px", 
+                        "height": "70px"  
                     }
                 })
             ) 
@@ -156,7 +158,7 @@ def UsuariosComponent(usuarios):
         custom_css,            
         html.table(
                 {
-                    "className": "custom-table"
+                "className": "table table-striped"
                 },
                 [
                     html.thead(
@@ -173,79 +175,6 @@ def UsuariosComponent(usuarios):
                 ]
             )
     )
-
-from reactpy import component, html
-import requests
-
-
-# @component
-# def UsuariosDeleteComponent(usuarios):
-#     def handle_delete(event, usuario_id):
-#         event.preventDefault()
-#         response = requests.delete(f'http://localhost:8000/eliminar-usuario/{usuario_id}')
-#         if response.ok:
-#             print('Usuario eliminado exitosamente')
-#         else:
-#             print(f'Error: {response.json().get("detail", "Error desconocido")}')
-
-#     rows = [
-#         html.tr([
-#             html.td(usuario.id),
-#             html.td(usuario.nombre),
-#             html.td(usuario.correo),
-#             html.td("********"), 
-#             html.td(usuario.fecha_registro.strftime('%Y-%m-%d %H:%M:%S')),
-#             html.td(
-#                 html.img({
-#                     "src": usuario.perfil_img, 
-#                     "alt": "Imagen de perfil", 
-#                     "className": "img-thumbnail", 
-#                     "style": {
-#                         "width": "50px", 
-#                         "height": "50px"  
-#                     }
-#                 })
-#             ),
-#             html.td(
-#                 html.button(
-#                     {
-#                         "onClick": lambda event: handle_delete(event, usuario.id),
-#                         "className": "btn btn-danger"
-#                     },
-#                     "Eliminar"
-#                 )
-#             )
-#         ]) for usuario in usuarios
-#     ]
-
-#     return html.div(
-#         {
-#             "className": "container mt-5"
-#         },
-#         bootstrap_css,
-#         font_awesome,
-#         google_fonts,
-#         custom_css,            
-#         html.table(
-#                 {
-#                     "className": "custom-table"
-#                 },
-#                 [
-#                     html.thead(
-#                         html.tr([
-#                             html.th("ID"),
-#                             html.th("Nombre"),
-#                             html.th("Correo"),
-#                             html.th("Contraseña"),
-#                             html.th("Fecha de Registro"),
-#                             html.th("Imagen de Perfil"),
-#                             html.th("Acciones")
-#                         ])
-#                     ),
-#                     html.tbody(rows)
-#                 ]
-#             )
-#     )
 
 @component
 def VehiculosComponent(vehiculos):
@@ -287,7 +216,8 @@ def VehiculosComponent(vehiculos):
                             html.th("Usuario"),
                             html.th("Tipo"),
                             html.th("Modelo"),
-                            html.th("Capacidad")
+                            html.th("Capacidad"),
+                            html.th("Imagen")
                         ])
                     ),
                     html.tbody(rows)
@@ -423,9 +353,6 @@ configure(app, PanelSolicitudesComponent)
 configure(app, PanelRutasComponent)
 configure(app, PanelVehiculosComponent)
 configure(app, PanelUsuariosComponent)
-
-
-
 
 # from fastapi import FastAPI, Depends, Request, HTMLResponse
 # from sqlalchemy.orm import Session
@@ -604,3 +531,73 @@ configure(app, PanelUsuariosComponent)
 
 #
 # configure(app, PanelUsuariosComponent)
+
+
+# @component
+# def UsuariosDeleteComponent(usuarios):
+#     def handle_delete(event, usuario_id):
+#         event.preventDefault()
+#         response = requests.delete(f'http://localhost:8000/eliminar-usuario/{usuario_id}')
+#         if response.ok:
+#             print('Usuario eliminado exitosamente')
+#         else:
+#             print(f'Error: {response.json().get("detail", "Error desconocido")}')
+
+#     rows = [
+#         html.tr([
+#             html.td(usuario.id),
+#             html.td(usuario.nombre),
+#             html.td(usuario.correo),
+#             html.td("********"), 
+#             html.td(usuario.fecha_registro.strftime('%Y-%m-%d %H:%M:%S')),
+#             html.td(
+#                 html.img({
+#                     "src": usuario.perfil_img, 
+#                     "alt": "Imagen de perfil", 
+#                     "className": "img-thumbnail", 
+#                     "style": {
+#                         "width": "50px", 
+#                         "height": "50px"  
+#                     }
+#                 })
+#             ),
+#             html.td(
+#                 html.button(
+#                     {
+#                         "onClick": lambda event: handle_delete(event, usuario.id),
+#                         "className": "btn btn-danger"
+#                     },
+#                     "Eliminar"
+#                 )
+#             )
+#         ]) for usuario in usuarios
+#     ]
+
+#     return html.div(
+#         {
+#             "className": "container mt-5"
+#         },
+#         bootstrap_css,
+#         font_awesome,
+#         google_fonts,
+#         custom_css,            
+#         html.table(
+#                 {
+#                     "className": "custom-table"
+#                 },
+#                 [
+#                     html.thead(
+#                         html.tr([
+#                             html.th("ID"),
+#                             html.th("Nombre"),
+#                             html.th("Correo"),
+#                             html.th("Contraseña"),
+#                             html.th("Fecha de Registro"),
+#                             html.th("Imagen de Perfil"),
+#                             html.th("Acciones")
+#                         ])
+#                     ),
+#                     html.tbody(rows)
+#                 ]
+#             )
+#     )

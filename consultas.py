@@ -1,3 +1,4 @@
+#consultas.py
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from reactpy.backend.fastapi import configure
@@ -10,6 +11,31 @@ from panels import UsuariosComponent, VehiculosComponent, RutasComponent, Solici
 from sqlalchemy.orm import joinedload
 
 app = FastAPI()
+
+# por buenas prácticas según se montan así los recursos en fastapi, yo digo que le hacen a la mamada nomás
+app.mount("/img", StaticFiles(directory="img"), name="images")
+app.mount("/css", StaticFiles(directory="css"), name="css")
+
+# estilos y otras cosillas
+bootstrap_css = html.link({
+    "rel": "stylesheet",
+    "href": "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+})
+
+font_awesome = html.link({
+    "rel": "stylesheet",
+    "href": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+})
+
+google_fonts = html.link({
+    "href": "https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap",
+    "rel": "stylesheet"
+})
+
+custom_css = html.link({
+    "rel": "stylesheet",
+    "href": "/css/styles.css"
+})
 
 def obtener_usuarios():
     db = SessionLocal()  
@@ -235,31 +261,6 @@ def Consultas():
     )
 
 configure(app, Consultas)
-
-# por buenas prácticas según se montan así los recursos en fastapi, yo digo que le hacen a la mamada nomás
-app.mount("/img", StaticFiles(directory="img"), name="images")
-app.mount("/css", StaticFiles(directory="css"), name="css")
-
-# estilos y otras cosillas
-bootstrap_css = html.link({
-    "rel": "stylesheet",
-    "href": "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-})
-
-font_awesome = html.link({
-    "rel": "stylesheet",
-    "href": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-})
-
-google_fonts = html.link({
-    "href": "https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap",
-    "rel": "stylesheet"
-})
-
-custom_css = html.link({
-    "rel": "stylesheet",
-    "href": "/css/styles.css"
-})
 
 # # app.mount("/static", StaticFiles(directory="static"), name="static")
 # app.mount("/img", StaticFiles(directory="img"), name="3")

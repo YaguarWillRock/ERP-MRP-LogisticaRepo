@@ -1,9 +1,22 @@
+# principal.py
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from reactpy.backend.fastapi import configure
 from reactpy import component, html
+from panels import RutasComponent, NotificacionesComponent
+from database import get_db, SessionLocal
+from sqlalchemy.orm import Session
+from models import Usuario, Vehiculo, Ruta, SolicitudEmbarque, Notificacion
+from sqlalchemy.orm import joinedload
+from consultas import obtener_rutas, obtener_notificaciones
 
 app = FastAPI()
+
+db: Session = next(get_db())
+rutas = db.query(Ruta).all()  # Asegúrate de que la consulta sea correcta
+notificaciones = db.query(Notificacion).all()
+
+
 
 app.mount("/img", StaticFiles(directory="img"), name="images")
 app.mount("/css", StaticFiles(directory="css"), name="css")
@@ -26,6 +39,8 @@ google_fonts = html.link({
 
 @component
 def Dashboard():
+    rutas=obtener_rutas()
+    notificaciones=obtener_notificaciones()
     return html.div(
         {
             "style": {
@@ -47,25 +62,27 @@ def Dashboard():
             ),
             html.div({"className": "card mb-4"},
                 html.div({"className": "card-header"},
-                    html.h4("Entregas y Recogidas Pendientes")
+                    html.h4("Entregas y Recogidas Pendientes"),
+                    RutasComponent(rutas)
                 ),
-                html.div({"className": "card-body"},
-                    html.ul(
-                        html.li("Entrega para el Cliente A - 05/10/2023"),
-                        html.li("Recogida en Almacén B - 06/10/2023")
-                    )
-                )
+                # html.div({"className": "card-body"},
+                #     html.ul(
+                #         html.li("Entrega para el Cliente A - 05/10/2023"),
+                #         html.li("Recogida en Almacén B - 06/10/2023")
+                #     )
+                # )
             ),
             html.div({"className": "card mb-4"},
                 html.div({"className": "card-header"},
-                    html.h4("Notificaciones y Alertas")
+                    html.h4("Notificaciones y Alertas"),
+                    NotificacionesComponent(notificaciones)
                 ),
-                html.div({"className": "card-body"},
-                    html.ul(
-                        html.li("El Proveedor X ha confirmado la entrega para el 10/10/2023."),
-                        html.li("Alerta: Bajo inventario de Producto Z.")
-                    )
-                )
+                # html.div({"className": "card-body"},
+                #     html.ul(
+                #         html.li("El Proveedor X ha confirmado la entrega para el 10/10/2023."),
+                #         html.li("Alerta: Bajo inventario de Producto Z.")
+                #     )
+                # )
             ),
             html.div({"className": "card"},
                 html.div({"className": "card-header"},
@@ -110,11 +127,6 @@ def Dashboard():
     )
 
 configure(app, Dashboard)
-
-
-# # app.mount("/static", StaticFiles(directory="static"), name="static")
-# app.mount("/img", StaticFiles(directory="img"), name="3")
-# app.mount("/css", StaticFiles(directory="css"), name="css")
 
 
 if __name__ == "__main__":
